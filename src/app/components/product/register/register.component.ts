@@ -4,6 +4,7 @@ import { Modal } from 'bootstrap';
 import { StoreModel } from 'src/app/model/store.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { CreateProductModel } from 'src/app/model/create-product.model';
 
 @Component({
   selector: 'app-register',
@@ -15,13 +16,15 @@ export class RegisterComponent {
   stores: StoreModel[] = [];
   storePriceSale: any[] = []
   form: FormGroup
+  formStorePrice: FormGroup
 
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService
   ) {
-    this.form = this.createFormBuilder()
+    this.formStorePrice = this.createFormStorePriceBuilder()
+    this.form = this.createForm()
   }
 
   ngOnInit() {
@@ -32,6 +35,11 @@ export class RegisterComponent {
 
   openModal() {
     this.modal.show()
+  }
+
+  closeModal() {
+    this.formStorePrice.reset()
+    this.modal.hide()
   }
 
   addStorePriceSale(form: FormGroup): void {
@@ -46,7 +54,7 @@ export class RegisterComponent {
   
         this.storePriceSale.push(formStorePriceSale)
         console.log(this.storePriceSale)
-        this.form.reset()
+        this.formStorePrice.reset()
         this.modal.hide()
       } else {
         this.toastr.error("Não é permitido mais que um preço de venda para a mesma loja.")
@@ -56,10 +64,35 @@ export class RegisterComponent {
     }
   }
 
-  private createFormBuilder(): FormGroup {
+  create(form: FormGroup): void {
+    if(this.storePriceSale.length == 0) {
+      this.toastr.error("O cadastro deve conter ao menos uma loja para que seja permitido salvar")
+    }
+
+    if(form.valid) {
+      let payload = this.formatPayload(form)
+      // this.save(payload)
+
+      console.log(payload)
+    }
+    else {
+      this.toastr.error("Um ou mais campos obrigatórios não foram preenchidos corretamente.")
+    }
+  }
+
+  private createFormStorePriceBuilder(): FormGroup {
     return this.formBuilder.group({
       selectedStore: ['', Validators.required],
-      priceSale: ['', [Validators.required, this.priceSaleValidator]]
+      priceSale: ['', [Validators.required, this.priceValidator]]
+    });
+  }
+
+  private createForm(): FormGroup {
+    return this.formBuilder.group({
+      description: ['', Validators.required],
+      cost: ['', [ this.priceValidator]],
+      image: [''],
+      stores: ['']
     });
   }
 
@@ -71,7 +104,7 @@ export class RegisterComponent {
     })
   }
 
-  private priceSaleValidator(control: FormControl): Object | null {
+  private priceValidator(control: FormControl): Object | null {
     const inputValue = control.value;
     const valid = /^\d{1,13}(\,\d{1,3})?$/.test(inputValue)
   
@@ -84,5 +117,29 @@ export class RegisterComponent {
     );
 
     return isDuplicate;
+  }
+
+  private formatPayload(form: FormGroup) {
+    let store = this.storePriceSale.map(sps => ({
+      id: sps.id,
+      priceSale: sps.priceSale.replace(',', '.')
+    }))
+
+    form.patchValue({ stores: store, cost: form.value.cost.replace(',', '.') })
+    form.value.image = form.value.image == "" ? null : form.value.image
+
+    return form.value as CreateProductModel
+  }
+
+  private save(payload: CreateProductModel): void {
+    this.productService.create(payload).subscribe({
+      next: (_res) => {
+        this.toastr.success("Produto salvo com sucesso")
+      },
+      error: (err) => {
+        console.log(err)
+        this.toastr.error("Erro ao salvar produto")
+      }
+    })
   }
 }

@@ -1,23 +1,24 @@
 <div>
-    <div class="mt-4 p-3 bg-opacity-10 border border-black border-start-0 text-center">
-        <i class="float-start bi bi-floppy-fill fs-4"></i>
-        <i class="float-start bi bi-trash-fill fs-4"></i>
-        Consulta de Produto
-    </div>
+    <form [formGroup]="form">
+        <div class="mt-4 p-3 bg-opacity-10 border border-black border-start-0 text-center">
+            <i class="float-start bi bi-floppy-fill fs-5 me-2" style="cursor: pointer; margin-top: -4px" (click)="create(form)"></i>
+            <i class="float-start bi bi-trash-fill fs-4" style="cursor: pointer; margin-top: -5px"></i>
+            <p class="m-0">Consulta de Produto</p>
+        </div>
+        <div class="mt-4">
+            <!-- <label for="code" class="form-label">*Código</label>
+            <input type="text" class="form-control" id="code"> -->
 
-    <div class="mt-4">
-        <label for="code" class="form-label">Código</label>
-        <input type="text" class="form-control" id="code">
+            <label for="description" class="form-label">*Descrição</label>
+            <input type="text" class="form-control" id="description" formControlName="description" placeholder="Ex: Manga">
 
-        <label for="description" class="form-label">Descrição</label>
-        <input type="text" class="form-control" id="description">
+            <label for="cost" class="form-label">Custo (R$)</label>
+            <input type="text" class="form-control" id="cost" inputmode="none" formControlName="cost" placeholder="9,999">
 
-        <label for="coast" class="form-label">Custo (R$)</label>
-        <input type="text" class="form-control" id="coast">
-
-        <label class="form-label" for="customFile">Imagem</label>
-        <input type="file" class="form-control" id="customFile" />
-    </div>
+            <label class="form-label" for="customFile">Imagem</label>
+            <input type="file" class="form-control" id="customFile"  formControlName="image"/>
+        </div>
+    </form>
 
     <div class="mt-4">
         <table class="table table-bordered table-hover border-black text-center">
@@ -32,7 +33,6 @@
               </thead>
               <tbody>
                 <tr *ngFor="let sps of storePriceSale">
-                    <!-- <td>{{ sps.id }}</td> -->
                     <td>{{ sps.description }}</td>
                     <td>{{ sps.priceSale }} 
                         <i class="float-end bi bi-pencil-fill p-1"></i>
@@ -47,12 +47,12 @@
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form [formGroup]="form">
+            <form [formGroup]="formStorePrice">
             <div class="modal-header d-block">
                 <h1 class="modal-title fs-5 text-center" id="modalLabel"> 
-                    <i class="float-start bi bi-floppy-fill" style="cursor: pointer;" (click)="addStorePriceSale(form)"></i>
+                    <i class="float-start bi bi-floppy-fill" style="cursor: pointer;" (click)="addStorePriceSale(formStorePrice)"></i>
                     Alteração/Inclusão de Preço
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close float-end" (click)="closeModal()" aria-label="Close"></button>
                 </h1>
             </div>
             <div class="modal-body">
@@ -65,7 +65,7 @@
                         </select>
                     </div>
                     <label for="price-sale" class="form-label mt-4">*Preço de Venda (R$)</label>
-                    <input type="text" class="form-control mb-4" id="price-sale" formControlName="priceSale" placeholder="9,999">
+                    <input type="text" class="form-control mb-4" id="price-sale" inputmode="none" formControlName="priceSale" placeholder="9,999">
                 </div>
             </div>
         </form>
