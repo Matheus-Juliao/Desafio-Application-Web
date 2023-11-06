@@ -1,0 +1,67 @@
+<div>
+    <div class="mt-4 p-3 bg-opacity-10 border border-black border-start-0 border-end-0 text-center">
+        <i class="float-start bi bi-plus-circle fs-3" style="cursor: pointer; margin-top: -7px;" (click)="registerProduct()"></i>
+        <p class="m-0">Consulta de Produto</p>
+    </div>
+    <div class="container-fluid ps-5">
+        <div class="mt-4 row">
+            <div class="col-md-2">
+                <label for="code" class="form-label">Código</label>
+                <input type="text" class="form-control" id="code">
+            </div>
+            <div class="col-md-4">
+                <label for="description" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="description">
+            </div>
+            <div class="col-md-2">
+                <label for="coast" class="form-label">Custo (R$)</label>
+                <input type="text" class="form-control" id="coast">
+            </div>
+            <div class="col-md-2">
+                <label for="price-sale" class="form-label">Preço de Venda</label>
+                <input type="text" class="form-control" id="price-sale">
+            </div>
+        </div>
+    
+        <div class="mt-4">
+            <table class="table table-bordered table-hover border-black text-center">
+                <thead>
+                    <tr>
+                      <th scope="col">Código</th>
+                      <th scope="col">Descrição</th>
+                      <th scope="col">Custo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of products">
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.cost }} 
+                            <i class="float-end bi bi-pencil-fill p-1" style="cursor: pointer;" (click)="edit(product)"></i>
+                            <!-- <i class="float-end bi bi-trash-fill p-1" style="cursor: pointer;" (click)="delete(product.id)"></i> -->
+                            <i class="float-end bi bi-trash-fill p-1" style="cursor: pointer;" (click)="openPopUp(product.id)"></i>
+                        </td>  
+                    </tr>
+                  </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pop-up-confirmation" tabindex="-1" aria-labelledby="pop-up-confirmation" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Tem certeza de que deseja excluir o produto com o código {{ selectedProductId }}?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" (click)="delete()">Excluir</button>
+        </div>
+        </div>
+    </div>
+</div>

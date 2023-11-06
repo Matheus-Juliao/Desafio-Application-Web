@@ -1,7 +1,7 @@
-import { ProductModel } from "./product.model";
+import { ProductListModel } from "./product-list.model";
 
 export interface ProductResponse {
-    data: ProductModel[],
+    data: ProductListModel[],
     limit: string,
     page: string,
     total: number

@@ -2,3 +2,9 @@
     padding-top: 0;
     padding-bottom: 0;
 }
+
+#id:focus {
+    box-shadow: 0 0 0 0;
+    outline: 0;
+    border-color: #dee2e6;
+}

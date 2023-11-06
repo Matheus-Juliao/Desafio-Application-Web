@@ -1,6 +1,7 @@
 import { StoreModel } from "./store.model";
 
-export interface CreateProductModel {
+export interface ProductModel {
+    id: number
     description: string,
     cost: number,
     image: string,

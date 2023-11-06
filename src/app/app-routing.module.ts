@@ -6,6 +6,7 @@ import { RegisterComponent } from './components/product/register/register.compon
 const routes: Routes = [
   { path: '', component: ProductComponent },
   { path: 'cadastro', component: RegisterComponent },
+  { path: 'editar/:id', component: RegisterComponent },
   { path: '', redirectTo: '/produto', pathMatch: 'full' },
 ]
 
